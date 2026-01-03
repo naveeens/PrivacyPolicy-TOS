@@ -1,41 +1,294 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Policies</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <!-- Inline SVG favicon: wordless suture mark (data URI) -->
+  <link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 60"><path d="M6 36 C20 6 40 54 60 30 C80 6 100 54 114 30" stroke="%23f8fbfc" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>' />
+  <title>suture.live</title>
+  <style>
+    :root{
+      --bg1:#0a0f12;
+      --bg2:#1a2226;
+      --ink:#f8fbfc;
+      --muted:#9ba7b2;
+      --accent:#00d4ff;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    html,body{height:100%}
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+      background:linear-gradient(180deg,var(--bg1) 0%, var(--bg2) 100%);
+      color:var(--ink);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      opacity:0;
+      transition:opacity 0.5s ease-in;
+    }
+
+    /* Center area (40% height) */
+    .stage{
+      width:100%;
+      height:40vh; /* adjusted */
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:3vh 5vw;
+    }
+
+    .canvas-wrap{
+      width:min(85vw,1100px);
+      height:40vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    svg{width:100%;height:100%;display:block}
+
+    .suture-path{
+      fill:none;
+      stroke:var(--ink);
+      stroke-width:3;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      stroke-dasharray:6 10;
+      opacity:0.95;
+    }
+
+    .stitch{
+      stroke:var(--ink);
+      stroke-width:4;
+      stroke-linecap:round;
+    }
+
+    /* Footer (70% height) */
+    .footer{
+      height:70vh;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:space-around;
+      text-align:center;
+      padding:1rem;
+    }
+
+    .brand{
+      font-weight:700;
+      font-size:clamp(20px,4.5vw,34px);
+      letter-spacing:0.06em;
+      text-transform:lowercase;
+      background:linear-gradient(90deg,var(--accent), var(--ink));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .dot-row{
+      display:flex;
+      gap:8px;
+      margin-top:4px;
+    }
+
+    .dot{width:8px;height:8px;border-radius:999px;background:linear-gradient(180deg,var(--accent),var(--muted));opacity:0.9}
+
+    /* Apps section */
+    .apps-section{
+      height:30vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1rem;
+    }
+
+    .apps-container{
+      display:flex;
+      gap:2rem;
+      overflow-x:auto;
+      padding:1rem;
+      max-width:100%;
+    }
+
+    .app-card{
+      width:200px;
+      height:200px;
+      padding:1rem;
+      background:var(--bg2);
+      border-radius:8px;
+      text-align:center;
+      cursor:pointer;
+      transition:transform 0.2s;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+    }
+
+    .app-card:hover{
+      transform:translateY(-5px);
+    }
+
+    .app-icon{
+      width:60px;
+      height:60px;
+      margin:0 auto 1rem;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .app-icon svg{
+      width:100%;
+      height:100%;
+      fill:none;
+      stroke:var(--accent);
+      stroke-width:2;
+    }
+
+    .app-title{
+      font-size:1.5rem;
+      font-weight:700;
+      margin-bottom:0.5rem;
+    }
+
+    @media (max-width:520px){
+      .canvas-wrap{height:44vh}
+      .suture-path{stroke-width:2}
+      .stitch{stroke-width:3}
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>App Policies</h1>
-            <p class="subtitle">Privacy Policy and Terms of Service for Our Apps</p>
-        </header>
-
-        <main>
-            <div class="card-container">
-                <div class="card">
-                    <h2>Blocs Privacy Policy and Terms of Service</h2>
-                    <p>Privacy and terms for the Blocs app.</p>
-                    <a href="blocs-privacy0policy-tos.html" class="btn">Read Blocs Policies</a>
-                </div>
-
-                <div class="card">
-                    <h2>Suture Privacy Policy and Terms of Service</h2>
-                    <p>Privacy and terms for the Suture medical exam preparation app.</p>
-                    <a href="suture-privacy-policy-tos.html" class="btn">Read Suture Policies</a>
-                </div>
-            </div>
-        </main>
-
-        <footer>
-            <p>&copy; <span id="year"></span> All rights reserved.</p>
-        </footer>
+  <section class="apps-section">
+    <div class="apps-container">
+      <div class="app-card" onclick="location.href='blocs.html'">
+        <div class="app-icon">
+          <svg viewBox="0 0 60 60">
+            <rect x="10" y="10" width="40" height="40" rx="4" fill="none" stroke="currentColor" stroke-width="2"/>
+            <line x1="20" y1="20" x2="40" y2="20" stroke="currentColor" stroke-width="1"/>
+            <line x1="20" y1="30" x2="40" y2="30" stroke="currentColor" stroke-width="1"/>
+            <line x1="20" y1="40" x2="40" y2="40" stroke="currentColor" stroke-width="1"/>
+            <line x1="30" y1="10" x2="30" y2="50" stroke="currentColor" stroke-width="1"/>
+          </svg>
+        </div>
+        <div class="app-title">Blocs</div>
+      </div>
+      <div class="app-card" onclick="location.href='suture.html'">
+        <div class="app-icon">
+          <svg viewBox="0 0 60 30">
+            <path d="M5 15 C15 5 25 25 35 15 C45 5 55 25 58 15" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="app-title">Suture</div>
+      </div>
     </div>
+  </section>
 
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
-    </script>
+  <footer class="footer" aria-hidden="false">
+    <div class="canvas-wrap">
+      <svg id="sutureSvg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet" role="img" aria-label="suture illustration">
+        <defs>
+          <filter id="soft" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="18" result="blur"/>
+            <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.1  0 0 0 0 0.14  0 0 0 0 0.16  0 0 0 0.55"/>
+          </filter>
+        </defs>
+
+        <!-- Wrap content so we can translate to center it precisely -->
+        <g id="contentGroup">
+          <!-- Trimmed main suture path -->
+          <path id="mainPath" class="suture-path" d="M80,120 C220,60 360,220 520,180 C660,150 760,40 900,120 C980,170 1050,260 1060,300" />
+
+          <!-- Group for stitches -->
+          <g id="stitches"></g>
+
+          <!-- Subtle background curve -->
+          <path id="bgCurve" d="M60,110 C210,40 350,200 520,180 C660,160 760,30 920,110 C1000,160 1040,240 1060,280" fill="none" stroke="#1e2c34" stroke-width="50" opacity="0.4" filter="url(#soft)"/>
+        </g>
+      </svg>
+    </div>
+    <div class="brand">suture.live</div>
+    <div class="dot-row" aria-hidden="true">
+      <div class="dot"></div>
+      <div class="dot"></div>
+      <div class="dot"></div>
+    </div>
+  </footer>
+
+  <script>
+    (function(){
+      const svg = document.getElementById('sutureSvg');
+      const content = document.getElementById('contentGroup');
+      const path = document.getElementById('mainPath');
+      const stitchesGroup = document.getElementById('stitches');
+
+      function centerContent(){
+        // compute bbox of content and svg viewBox
+        const bbox = content.getBBox();
+        const viewBox = svg.viewBox.baseVal;
+        const contentCenterX = bbox.x + bbox.width/2;
+        const viewCenterX = viewBox.x + viewBox.width/2;
+  const dx = viewCenterX - contentCenterX;
+  // move a little lower than exact center (8% of view height)
+  const contentCenterY = bbox.y + bbox.height/2;
+  const viewCenterY = viewBox.y + viewBox.height/2;
+  const verticalOffset = viewBox.height * 0.08; // tweak this to adjust how much lower
+  const dy = (viewCenterY + verticalOffset) - contentCenterY;
+  // apply translate preserving existing transforms
+  content.setAttribute('transform', `translate(${dx},${dy})`);
+      }
+
+      function makeStitches(){
+        // clear existing
+        while(stitchesGroup.firstChild) stitchesGroup.removeChild(stitchesGroup.firstChild);
+        const totalLen = path.getTotalLength();
+        const stitchCount = 12;
+        const stitchLength = 24;
+        for(let i=1;i<stitchCount;i++){
+          const t = i/(stitchCount+1);
+          const pos = path.getPointAtLength(t * totalLen);
+          const ahead = path.getPointAtLength(Math.min(totalLen, (t*totalLen)+1));
+          const dx = ahead.x - pos.x;
+          const dy = ahead.y - pos.y;
+          const angle = Math.atan2(dy,dx) + Math.PI/2;
+          const x1 = pos.x - Math.cos(angle)*(stitchLength/2);
+          const y1 = pos.y - Math.sin(angle)*(stitchLength/2);
+          const x2 = pos.x + Math.cos(angle)*(stitchLength/2);
+          const y2 = pos.y + Math.sin(angle)*(stitchLength/2);
+          const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+          line.setAttribute('class','stitch');
+          line.setAttribute('x1',x1);
+          line.setAttribute('y1',y1);
+          line.setAttribute('x2',x2);
+          line.setAttribute('y2',y2);
+          stitchesGroup.appendChild(line);
+        }
+      }
+
+      // run after DOM paints to ensure getBBox works
+      requestAnimationFrame(()=>{
+        centerContent();
+        makeStitches();
+      });
+
+      // re-center on resize (responsive)
+      window.addEventListener('resize', ()=>{
+        // small debounce
+        clearTimeout(window.__suture_center_timeout);
+        window.__suture_center_timeout = setTimeout(()=>{
+          centerContent();
+          makeStitches();
+        },120);
+      });
+
+      // fade in
+      setTimeout(() => document.body.style.opacity = '1', 100);
+    })();
+  </script>
 </body>
 </html>
